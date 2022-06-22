@@ -6,6 +6,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/Assignment_2.dir/Activity.cpp.obj.d"
   "CMakeFiles/Assignment_2.dir/Holiday.cpp.obj"
   "CMakeFiles/Assignment_2.dir/Holiday.cpp.obj.d"
+  "CMakeFiles/Assignment_2.dir/User.cpp.obj"
+  "CMakeFiles/Assignment_2.dir/User.cpp.obj.d"
   "CMakeFiles/Assignment_2.dir/main.cpp.obj"
   "CMakeFiles/Assignment_2.dir/main.cpp.obj.d"
   "libAssignment_2.dll.a"

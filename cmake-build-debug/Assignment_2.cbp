@@ -94,6 +94,12 @@
 		<Unit filename="E:/Documents/University/Software/Y2-Software-Portfolio/Holiday.h">
 			<Option target="Assignment_2"/>
 		</Unit>
+		<Unit filename="E:/Documents/University/Software/Y2-Software-Portfolio/User.cpp">
+			<Option target="Assignment_2"/>
+		</Unit>
+		<Unit filename="E:/Documents/University/Software/Y2-Software-Portfolio/User.h">
+			<Option target="Assignment_2"/>
+		</Unit>
 		<Unit filename="E:/Documents/University/Software/Y2-Software-Portfolio/main.cpp">
 			<Option target="Assignment_2"/>
 		</Unit>
