@@ -1,9 +1,9 @@
 #include "Activity.h"
 
-std::string Activity::GetLocation() {
+std::string Activity::GetActivity() {
     return this->_sActivity;
 }
-void Activity::SetLocation(std::string sActivity) {
+void Activity::SetActivity(std::string sActivity) {
     this->_sActivity = sActivity;
 }
 

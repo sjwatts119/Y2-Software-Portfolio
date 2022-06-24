@@ -56,10 +56,10 @@ RM = "C:\Program Files\JetBrains\CLion 2022.1\bin\cmake\win\bin\cmake.exe" -E rm
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = E:\Documents\University\Software\Y2-Software-Portfolio
+CMAKE_SOURCE_DIR = C:\Users\p0w0y\Desktop\Y2-Software-Portfolio
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = E:\Documents\University\Software\Y2-Software-Portfolio\cmake-build-debug
+CMAKE_BINARY_DIR = C:\Users\p0w0y\Desktop\Y2-Software-Portfolio\cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -86,9 +86,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start E:\Documents\University\Software\Y2-Software-Portfolio\cmake-build-debug\CMakeFiles E:\Documents\University\Software\Y2-Software-Portfolio\cmake-build-debug\\CMakeFiles\progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\p0w0y\Desktop\Y2-Software-Portfolio\cmake-build-debug\CMakeFiles C:\Users\p0w0y\Desktop\Y2-Software-Portfolio\cmake-build-debug\\CMakeFiles\progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start E:\Documents\University\Software\Y2-Software-Portfolio\cmake-build-debug\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\p0w0y\Desktop\Y2-Software-Portfolio\cmake-build-debug\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -200,6 +200,30 @@ User.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Assignment_2.dir\build.make CMakeFiles/Assignment_2.dir/User.cpp.s
 .PHONY : User.cpp.s
 
+UserHoliday.obj: UserHoliday.cpp.obj
+.PHONY : UserHoliday.obj
+
+# target to build an object file
+UserHoliday.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Assignment_2.dir\build.make CMakeFiles/Assignment_2.dir/UserHoliday.cpp.obj
+.PHONY : UserHoliday.cpp.obj
+
+UserHoliday.i: UserHoliday.cpp.i
+.PHONY : UserHoliday.i
+
+# target to preprocess a source file
+UserHoliday.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Assignment_2.dir\build.make CMakeFiles/Assignment_2.dir/UserHoliday.cpp.i
+.PHONY : UserHoliday.cpp.i
+
+UserHoliday.s: UserHoliday.cpp.s
+.PHONY : UserHoliday.s
+
+# target to generate assembly for a file
+UserHoliday.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Assignment_2.dir\build.make CMakeFiles/Assignment_2.dir/UserHoliday.cpp.s
+.PHONY : UserHoliday.cpp.s
+
 main.obj: main.cpp.obj
 .PHONY : main.obj
 
@@ -242,6 +266,9 @@ help:
 	@echo ... User.obj
 	@echo ... User.i
 	@echo ... User.s
+	@echo ... UserHoliday.obj
+	@echo ... UserHoliday.i
+	@echo ... UserHoliday.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

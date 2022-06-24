@@ -1,4 +1,4 @@
-# Install script for directory: E:/Documents/University/Software/Y2-Software-Portfolio
+# Install script for directory: C:/Users/p0w0y/Desktop/Y2-Software-Portfolio
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "E:/Documents/University/Software/Y2-Software-Portfolio/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/p0w0y/Desktop/Y2-Software-Portfolio/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

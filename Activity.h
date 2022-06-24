@@ -10,8 +10,8 @@ private:
     std::vector<std::string> _vAvailableLocations;
 public:
     //Get and Set functions for the Activity Variable.
-    std::string GetLocation();
-    void SetLocation(std::string sActivity);
+    std::string GetActivity();
+    void SetActivity(std::string sActivity);
 
     //Get and Set functions for the Cost Variable.
     int GetCost();
