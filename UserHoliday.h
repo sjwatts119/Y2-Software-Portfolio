@@ -17,6 +17,7 @@ public:
 
 
 
+
 UserHoliday(std::vector<Holiday>& vHoliday, std::vector<Activity>& vActivities, std::vector<User>& vFamily);
 
 };

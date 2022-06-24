@@ -10,6 +10,7 @@
 #include "UserHoliday.h"
 
 void clearScreen(){
+    //Clears the screen
     std::cout << std::string(50, '\n');
 }
 
@@ -35,6 +36,7 @@ void InitialiseActivities(std::vector<Activity>&vActivities){
     vActivities.push_back(Activity("Sky Diving", 110, {"Florida"}));
 }
 
+//Prints the Main Menu to the screen.
 void MainMenu(){
     clearScreen();
 
@@ -48,6 +50,7 @@ void MainMenu(){
     std::cout << "Please make a Selection: ";
 }
 
+//Prints the Manage Family Menu to the screen.
 void FamilyMenu(){
     clearScreen();
 
@@ -62,6 +65,7 @@ void FamilyMenu(){
     std::cout << "Please make a Selection: ";
 }
 
+//Prints the Current Family Members to the screen.
 void PrintFamily(std::vector<User>&vFamily){
     //Print out the Family Vector to the screen.
     for(int i = 0; i < vFamily.size(); i++){
@@ -73,6 +77,7 @@ void PrintFamily(std::vector<User>&vFamily){
     }
 }
 
+//Allows the user to add a new Family Member to the Family Vector.
 void AddUser(std::vector<User>&vFamily) {
     bool bStop = false;
 
@@ -106,6 +111,7 @@ void AddUser(std::vector<User>&vFamily) {
     } while(!bStop);
 }
 
+//Allows the user to remove a Family Member from the Family Vector.
 void DeleteUser(std::vector<User>&vFamily){
     bool bStop = false;
 
@@ -147,6 +153,7 @@ void DeleteUser(std::vector<User>&vFamily){
     } while(!bStop);
 }
 
+//Allows the user to modify a Family Member in the Family Vector.
 void ModifyUser(std::vector<User>&vFamily){
     bool bStop = false;
 
@@ -211,6 +218,35 @@ void ModifyUser(std::vector<User>&vFamily){
     } while(!bStop);
 }
 
+//Checks if the Family is Eligible for the Discount.
+bool FamilyDiscount(std::vector<User>&vFamily){
+    int iUnder18 = 0;
+
+    //If the Family Vector has Four Members, and two of them are under the age of 18, return true.
+    if(vFamily.size() == 4){
+        //Loop through the Family Vector.
+        for(auto & Person : vFamily){
+            //If the Person is under 18, increment the counter.
+            if(Person.GetAge() < 18){
+                iUnder18++;
+            }
+        }
+        //If there are two Under 18s, and if Family Size is 4, return true.
+        if(iUnder18 == 2){
+            return true;
+        }
+        //If there are not two Under 18s, return false.
+        else{
+            return false;
+        }
+    }
+    //If Family Size is not 4, return false.
+    else{
+        return false;
+    }
+}
+
+//provides a menu for the user to select from to Manage the Family.
 void ManageUsers(std::vector<User>&vFamily){
     bool bStop = false;
     int iChoice = 0;
@@ -242,6 +278,7 @@ void ManageUsers(std::vector<User>&vFamily){
     }while(!bStop);
 };
 
+//Prints the Location Management Menu.
 void PrintLocations(std::vector<Holiday>&vHolidays){
     //Clear Input Buffer
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -264,6 +301,7 @@ void PrintLocations(std::vector<Holiday>&vHolidays){
     }
 }
 
+//Prints the Activity Management Menu.
 void PrintActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, int iLocation){
     //Clear Input Buffer
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -285,6 +323,7 @@ void PrintActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActi
     }
 }
 
+//Allows the user to choose a location.
 int ChooseLocation(std::vector<Holiday>&vHolidays){
     //Clear the screen
     clearScreen();
@@ -309,6 +348,7 @@ int ChooseLocation(std::vector<Holiday>&vHolidays){
     }
 }
 
+//Allows the user to choose an activity.
 int ChooseActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, int iLocationIndex){
     clearScreen();
 
@@ -334,6 +374,7 @@ int ChooseActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActi
     }
 }
 
+//Allows the user to manage their holiday
 void ManageHoliday(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, std::vector<User>&vFamily, std::vector<UserHoliday>&vUserHolidays){
     clearScreen();
 
@@ -377,6 +418,26 @@ void ManageHoliday(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivi
 
     }while(!bStop);
 };
+
+double CalculateCost(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, std::vector<User>&vFamily, std::vector<UserHoliday>&vUserHolidays){
+    double totalCost= 0;
+
+    //START HERE TOMORROW
+    //START HERE TOMORROW
+    //START HERE TOMORROW
+    //START HERE TOMORROW
+    //START HERE TOMORROW
+    //START HERE TOMORROW
+    //START HERE TOMORROW
+
+
+
+    if (FamilyDiscount(vFamily)) {
+        //10% Discount from totalCost if family is eligible for discount.
+        totalCost = totalCost * 0.9;
+    }
+
+}
 
 void UserConfirmation(){
 
@@ -436,24 +497,5 @@ int main() {
 
         }
     } while(!bStop);
-
-
-
-
-    /*std::vector<std::string> vTest = vActivities[0].GetAvailableLocations();
-
-    for (int i=0; i < vTest.size(); i++) {
-        std::cout << vTest[i] << " ";
-    }
-
-    vActivities[0].RemoveAvailableLocation(1);
-    vActivities[0].AddAvailableLocation("New Ting");
-    vTest = vActivities[0].GetAvailableLocations();
-
-    for (int i=0; i < vTest.size(); i++) {
-        std::cout << vTest[i] << " ";
-    }*/
-
-
     return 0;
 }
