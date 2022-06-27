@@ -9,11 +9,13 @@
 #include "User.h"
 #include "UserHoliday.h"
 
-void clearScreen(){
+//Clears the screen
+void ClearScreen(){
     //Clears the screen
     std::cout << std::string(50, '\n');
 }
 
+//Prompts the user to press enter to continue
 void Confirm(){
     std::cout << "Press Enter to Continue...";
     //Make sure the user presses enter before continuing.
@@ -38,13 +40,13 @@ void InitialiseActivities(std::vector<Activity>&vActivities){
 
 //Prints the Main Menu to the screen.
 void MainMenu(){
-    clearScreen();
+    ClearScreen();
 
     //Prints the Main Menu
     std::cout << " Please choose from the following options:" << std::endl << std::endl;
     std::cout << "1. Manage your Family" << std::endl;
-    std::cout << "2. Manage Holiday" << std::endl;
-    std::cout << "3. Confirm Holiday" << std::endl;
+    std::cout << "2. Add Holiday" << std::endl;
+    std::cout << "3. View Booked Holidays" << std::endl;
     std::cout << "4. Load Report" << std::endl;
     std::cout << "5. Login to Admin Area" << std::endl << std::endl;
     std::cout << "Please make a Selection: ";
@@ -52,7 +54,7 @@ void MainMenu(){
 
 //Prints the Manage Family Menu to the screen.
 void FamilyMenu(){
-    clearScreen();
+    ClearScreen();
 
     //Prints the Family Menu
     std::cout << "You are now managing your Family." << std::endl;
@@ -82,7 +84,7 @@ void AddUser(std::vector<User>&vFamily) {
     bool bStop = false;
 
     do{
-        clearScreen();
+        ClearScreen();
 
         std::string sName;
         int iAge = 0;
@@ -118,14 +120,14 @@ void DeleteUser(std::vector<User>&vFamily){
     do{
         //If Family Vector is Empty, the user will be returned to the Family Management Menu.
         if(vFamily.empty()) {
-            clearScreen();
+            ClearScreen();
             std::cout << std::endl;
             std::cout << "You have no family members to remove." << std::endl;
             Confirm();
             return;
         }
         //Clear the screen
-        clearScreen();
+        ClearScreen();
 
         //Print out the Family Vector to the screen.
         PrintFamily(vFamily);
@@ -157,9 +159,18 @@ void DeleteUser(std::vector<User>&vFamily){
 void ModifyUser(std::vector<User>&vFamily){
     bool bStop = false;
 
+    //If Family Vector is Empty, the user will be returned to the Family Management Menu.
+    if(vFamily.empty()) {
+        ClearScreen();
+        std::cout << std::endl;
+        std::cout << "You have no family members to Modify." << std::endl;
+        Confirm();
+        return;
+    }
+
     do{
         //Clear the screen
-        clearScreen();
+        ClearScreen();
 
         //Print out the Family Vector to the screen.
         PrintFamily(vFamily);
@@ -171,9 +182,6 @@ void ModifyUser(std::vector<User>&vFamily){
 
         //If the user selects 0, return to the Family Management Menu.
         if (iChoice == 0) {
-            std::cout << "\n";
-            std::cout << "You will now be returned to the Family Management Menu." << std::endl;
-            Confirm();
             bStop = true;
         }
         else{
@@ -203,9 +211,6 @@ void ModifyUser(std::vector<User>&vFamily){
                 }
                     //If the user wants to cancel, stop the loop.
                 else if (sChoice == "cancel" || sChoice == "Cancel") {
-                    std::cout << "\n";
-                    std::cout << "You will now be returned to the Family Management Menu." << std::endl;
-                    Confirm();
                     bStop2 = true;
                 }
                     //If the user enters an invalid input, ask them to try again.
@@ -246,7 +251,7 @@ bool FamilyDiscount(std::vector<User>&vFamily){
     }
 }
 
-//provides a menu for the user to select from to Manage the Family.
+//Provides a menu for the user to select from to Manage the Family.
 void ManageUsers(std::vector<User>&vFamily){
     bool bStop = false;
     int iChoice = 0;
@@ -288,7 +293,7 @@ void PrintLocations(std::vector<Holiday>&vHolidays){
 
     //Print out the Holiday Vector to the screen.
     for(int i = 0; i < vHolidays.size(); i++) {
-        std::cout << "Activity "<< i+1 << ": "<< std::endl;
+        std::cout << "Location #"<< i+1 << ": "<< std::endl;
         std::cout << "Location: " << ": " << vHolidays[i].GetLocation() << std::endl;
         std::cout << "Price (Per Person): " << ": " << vHolidays[i].GetCost() << std::endl;
         std::cout << "Minimum Travellers: " << ": " << vHolidays[i].GetMinimumTravellers() << std::endl;
@@ -312,7 +317,7 @@ void PrintActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActi
 
         //If the current activity is available in the current location, print it out.
         if(std::find(vAvailableLocations.begin(), vAvailableLocations.end(), vHolidays[iLocation].GetLocation()) != vAvailableLocations.end()){
-            std::cout << "Activity "<< iCount << ": "<< std::endl;
+            std::cout << "Activity #"<< iCount << ": "<< std::endl;
             std::cout << Activity.GetActivity() << std::endl;
             std::cout << "Price (Per Person): " << Activity.GetCost() << std::endl;
             std::cout << "\n";
@@ -324,33 +329,54 @@ void PrintActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActi
 }
 
 //Allows the user to choose a location.
-int ChooseLocation(std::vector<Holiday>&vHolidays){
-    //Clear the screen
-    clearScreen();
+int ChooseLocation(std::vector<Holiday>&vHolidays, std::vector <User>&vFamily){
+    do{
+        //Clear the screen
+        ClearScreen();
 
-    //Print the Holidays Vector to the screen.
-    PrintLocations(vHolidays);
+        //Print the Holidays Vector to the screen.
+        PrintLocations(vHolidays);
 
-    //Ask the user to select a location.
-    std::cout << "Please select a Holiday Location: ";
-    int iChoice = 0;
-    std::cin >> iChoice;
+        //Ask the user to select a location.
+        std::cout << "Please select a Holiday Location: ";
+        int iChoice = 0;
+        std::cin >> iChoice;
 
-    //If the user selects 0, return to the Main Menu.
-    if (iChoice == 0) {
-        std::cout << "\n";
-        std::cout << "You will now be returned to the Main Menu." << std::endl;
-        Confirm();
-    }
-    else{
-        //Returns the index of the Holiday Location in the Holiday Vector.
-        return iChoice-1;
-    }
+        //If the user selects 0, return to the Main Menu.
+        if (iChoice == 0) {
+            //Returning -1 to handle user wanting to return the main menu.
+            return -1;
+        }
+        else if (vHolidays[iChoice-1].GetMinimumTravellers() > vFamily.size()) {
+            std::cout << "Sorry, this location is not available for your group size." << std::endl;
+
+            std::string sChoice;
+            bool bStop = false;
+            do {
+                std::cout << "Would you like to try another location? (y/n): ";
+                std::cin >> sChoice;
+
+                if (sChoice == "y" || sChoice == "Y") {
+                    //Loop until the user selects a valid location or returns to the menu.
+                    bStop = true;
+                } else if (sChoice == "n" || sChoice == "N") {
+                    //Returning -1 to handle user wanting to return the main menu.
+                    return -1;
+                } else {
+                    std::cout << "Please enter a valid option." << std::endl;
+                }
+            } while (!bStop);
+        }
+        else{
+            //Returns the index of the Holiday Location in the Holiday Vector.
+            return iChoice-1;
+        }
+    }while(true);
 }
 
 //Allows the user to choose an activity.
 int ChooseActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, int iLocationIndex){
-    clearScreen();
+    ClearScreen();
 
     PrintActivities(vHolidays, vActivities, iLocationIndex);
 
@@ -374,13 +400,58 @@ int ChooseActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActi
     }
 }
 
-//Allows the user to manage their holiday
-void ManageHoliday(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, std::vector<User>&vFamily, std::vector<UserHoliday>&vUserHolidays){
-    clearScreen();
+void PreviewCost(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, std::vector<User>&vFamily, int &iLocationIndex, std::vector<int>&vActivityIndexes){
+    int iAdults = 0;
+    int iChildren = 0;
+
+    //Iterates through the vector of users and counts the number of adults and children.
+    for(auto User : vFamily){
+        if(User.GetAge() >= 18){ iAdults++; }
+        else{ iChildren++; }
+    }
+
+    //Multiples location cost by the number of adults and children.
+    double dLocationCost = (iAdults+iChildren) * vHolidays[iLocationIndex].GetCost();
+
+    //Iterates through the vector of indexes and adds the cost of the activities to the total cost.
+    double dActivityCost = 0;
+    for(auto iIndex : vActivityIndexes){
+        dActivityCost = (iChildren + iAdults) * vActivities[iIndex].GetCost();
+    }
+
+    //Calculates the total cost of the trip without VAT or Discount being applied.
+    double totalCost = dLocationCost + dActivityCost;
+
+    //Add 20% to the total cost for VAT.
+    double totalTaxedCost = totalCost * 1.2;
+
+    double dDiscount = 0;
+    if (FamilyDiscount(vFamily)) {
+        //10% Discount from totalCost if family is eligible for discount.
+        totalCost = totalCost * 0.9;
+        dDiscount = totalCost * 0.1;
+    }
+
+    //Prints the total cost Summary of the trip with breakdowns of the costs.
+    ClearScreen();
+    std::cout << "Here is a Cost Summary of your Holiday:" << std::endl;
+    std::cout << "Location Cost: " << dLocationCost << std::endl;
+    std::cout << "Activity Cost: " << dActivityCost << std::endl;
+    std::cout << "VAT: " << totalTaxedCost - totalCost << std::endl;
+    //If there is a discount, print it.
+    if (dDiscount != 0) {
+        std::cout << "Family Discount: " << dDiscount << std::endl;
+    }
+    std::cout << "Total Cost: " << totalCost << std::endl;
+}
+
+//Allows the user to manage the Current holiday
+void AddHoliday(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, std::vector<User>&vFamily, std::vector<UserHoliday>&vUserHolidays){
+    ClearScreen();
 
     //If the Family Vector is empty, print an error message and return to the Main Menu.
     if(vFamily.empty()){
-        std::cout << "You must add a family member before you can add a holiday." << std::endl;
+        std::cout << "You must add a family member before you can add a Holiday." << std::endl;
 
         //Get the user to press enter to continue.
         Confirm();
@@ -388,60 +459,87 @@ void ManageHoliday(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivi
         return;
     }
 
-    //Print the Holiday Management Menu and ask the user to make a selection. Returns the index of the Holiday Location in the Holiday Vector.
-    int iLocationIndex = ChooseLocation(vHolidays);
+    //Prompting the user to select a location.
+    std::cout << "Here are the Holiday Locations we have Available: " << std::endl;
 
-    //If the user selects -1(0 on their prompt), return to the Main Menu.
-    if (iLocationIndex < 0){
-        std::cout << "You will be returned to the main menu." << std::endl;
+    //Print the Holiday Management Menu and ask the user to make a selection. Returns the index of the Holiday Location in the Holiday Vector + 1, we need to subtract one to get the real index.
+    int iLocationIndex = ChooseLocation(vHolidays, vFamily);
+
+    //If function returns -1, the user has selected to return to the main menu, or couldn't add a location due to group size, so the function returns.
+    if (iLocationIndex == 0) {
         return;
     }
+    else{
+        bool bStop = false;
+        //Vector for storing the Activities chosen by the user.
+        std::vector<int> vSelectedActivitiesIndexes;
+        std::vector<Activity> vSelectedActivities;
 
-    bool bStop = false;
-    std::vector<int> vSelectedActivities;
-    do{
-        if (ChooseActivities(vHolidays, vActivities, iLocationIndex) != 0) {
-            vSelectedActivities.push_back(ChooseActivities(vHolidays, vActivities, (iLocationIndex-1)));
+        //Loops through all activities, adding the user's selected ones to the vector.
+        for (auto vSelectedActivityIndex : vSelectedActivitiesIndexes) {
+            vSelectedActivities.push_back(vActivities[vSelectedActivityIndex]);
+        }
 
-            std::cout << "Would you like to add another activity to your trip? (y/n)";
-            std::string sChoice;
-            std::cin >> sChoice;
+        do{
+            //
+            if (ChooseActivities(vHolidays, vActivities, iLocationIndex) != 0) {
+                vSelectedActivitiesIndexes.push_back(ChooseActivities(vHolidays, vActivities, (iLocationIndex-1)));
 
-            if(sChoice == "n" || sChoice == "N"){
-                //If the user does not want to add another activity, return to the holiday management menu.
+                std::cout << "Would you like to add another activity to your trip? (y/n)";
+                std::string sChoice;
+                std::cin >> sChoice;
+
+                if(sChoice == "n" || sChoice == "N"){
+
+                    bool bStop2 = false;
+
+                    do{
+                        //Prints the total Cost breakdown of the Holiday.
+                        PreviewCost(vHolidays, vActivities, vFamily, iLocationIndex, vSelectedActivitiesIndexes);
+
+                        //Ask the user if they would like to confirm the trip.
+                        std::cout << "Would you like to Confirm this Holiday Booking?: " << std::endl;
+                        std::cout << "(y/n): ";
+                        std::string sConfirm;
+                        std::cin >> sConfirm;
+
+                        if(sConfirm == "y" || sConfirm == "Y"){
+                            //Making a new vector from the user's chosen location.
+                            std::vector<Holiday> vSelectedLocation;
+                            vSelectedLocation.push_back(vHolidays[iLocationIndex]);
+
+                            //Adds the Holiday to the UserHoliday Vector.
+                            vUserHolidays.emplace_back(UserHoliday(vSelectedLocation, vSelectedActivities, vFamily));
+                            std::cout << "Holiday Booking Confirmed! You will now be returned to the Holiday Management Menu." << std::endl;
+                            Confirm();
+                            bStop2 = true;
+                        }
+                        else if(sConfirm == "n" || sConfirm == "N"){
+                            std::cout << "Holiday Booking Cancelled! You will now be returned to the Holiday Management Menu." << std::endl;
+                            Confirm();
+                            bStop2 = true;
+                        }
+                        else{
+                            std::cout << "Please enter a valid option." << std::endl;
+                        }
+                    }while(!bStop2);
+
+                    bStop = true;
+                }
+            }
+            else{
                 bStop = true;
             }
-        }
-        else{
-            bStop = true;
-        }
 
-    }while(!bStop);
+        }while(!bStop);
+    }
 };
 
-double CalculateCost(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, std::vector<User>&vFamily, std::vector<UserHoliday>&vUserHolidays){
-    double totalCost= 0;
-
-    //START HERE TOMORROW
-    //START HERE TOMORROW
-    //START HERE TOMORROW
-    //START HERE TOMORROW
-    //START HERE TOMORROW
-    //START HERE TOMORROW
-    //START HERE TOMORROW
-
-
-
-    if (FamilyDiscount(vFamily)) {
-        //10% Discount from totalCost if family is eligible for discount.
-        totalCost = totalCost * 0.9;
-    }
+void ViewBookings(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, std::vector<User>&vFamily, std::vector<UserHoliday>&vUserHolidays){
+    ClearScreen();
+    std::cout << "Here are your Current Bookings: " << std::endl;
 
 }
-
-void UserConfirmation(){
-
-};
 
 void LoadReport(){
 
@@ -479,11 +577,22 @@ int main() {
                 ManageUsers(vFamily);
                 break;
             case 2:
-                ManageHoliday(vHolidays,vActivities, vFamily, vUserHolidays);
+                AddHoliday(vHolidays,vActivities, vFamily, vUserHolidays);
+
+                std::cout << "Here are the Holidays you have booked:" << std::endl;
+
+                for (auto vUserHoliday : vUserHolidays) {
+                    std::cout << "Location: " << vUserHoliday.GetLocation() << std::endl;
+
+                    for(int i = 0; i <= vUserHoliday.GetActivities().size(); i++){
+                        std::cout << "Activity: " << vUserHoliday.GetActivities()[i] << std::endl;
+                        std::cout << "Activity Cost: " << vUserHoliday.GetActivitiesPrice()[i] << std::endl;
+                    }
+                }
+
                 break;
             case 3:
-                UserConfirmation();
-                bStop = true;
+                ViewBookings(vHolidays, vActivities, vFamily, vUserHolidays);
                 break;
             case 4:
                 LoadReport();

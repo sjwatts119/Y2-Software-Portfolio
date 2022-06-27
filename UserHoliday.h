@@ -16,6 +16,16 @@ private:
 public:
 
 
+    std::string GetLocation();
+
+    double GetLocationPrice();
+
+    //Return Holiday Activities
+    std::vector<std::string> GetActivities();
+
+    std::vector<double> GetActivitiesPrice();
+
+    std::vector<User> GetFamily();
 
 
 UserHoliday(std::vector<Holiday>& vHoliday, std::vector<Activity>& vActivities, std::vector<User>& vFamily);
