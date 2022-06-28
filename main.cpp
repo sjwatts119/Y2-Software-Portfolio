@@ -311,8 +311,6 @@ void PrintLocations(std::vector<Holiday>&vHolidays){
 
 //Prints the Activity Management Menu.
 void PrintActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, int iLocation, std::vector<int>&vSelectedActivityIndexes){
-    //Clear Input Buffer
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     int iCount = 1;
 
     for(auto Activity : vActivities){
@@ -321,15 +319,17 @@ void PrintActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActi
         //If the current activity is available in the current location, print it out.
         if(std::find(vAvailableLocations.begin(), vAvailableLocations.end(), vHolidays[iLocation].GetLocation()) != vAvailableLocations.end()){
 
-            //If no Activities have been selected, or if the current activity has not already been added, print out the current activity.
-            if (vSelectedActivityIndexes.size() == 0 || std::find(vSelectedActivityIndexes.begin(), vSelectedActivityIndexes.end(), iCount) != vSelectedActivityIndexes.end()){
+            //if the current activity is already selected, print it out stating it has already been selected..
+            if(std::find(vSelectedActivityIndexes.begin(), vSelectedActivityIndexes.end(), iCount) != vSelectedActivityIndexes.end()){
+                std::cout << "Activity #" << iCount << " (Already Added): " << std::endl;
+                std::cout << "Activity: " << ": " << Activity.GetActivity() << std::endl;
+                std::cout << "\n";
+            }
+            else{
                 std::cout << "Activity #"<< iCount << std::endl;
                 std::cout << Activity.GetActivity() << std::endl;
                 std::cout << "Price (Per Person): " << Activity.GetCost() << std::endl;
                 std::cout << "\n";
-            }
-            else{
-                std::cout << "Activity #" << iCount << " (Already Added): " << std::endl << std::endl;
             }
             //Iterates the counter.
             iCount++;
@@ -500,8 +500,16 @@ void AddHoliday(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivitie
             //If user selects anything other than 0, they want to add an activity.
             if (Activity != 0) {
 
-                //Adds the index of the activity to the vector.
-                vSelectedActivitiesIndexes.push_back(Activity);
+                //If user has already selected the Activity, print an error message and Loop again.
+                if (std::find(vSelectedActivitiesIndexes.begin(), vSelectedActivitiesIndexes.end(), Activity) != vSelectedActivitiesIndexes.end()) {
+                    std::cout << "You have already selected this activity." << std::endl;
+                    Confirm();
+                    continue;
+                }
+                else{
+                    //Add the Activity to the vector of selected Activities.
+                    vSelectedActivitiesIndexes.push_back(Activity);
+                }
 
                 std::cout << "Would you like to add another activity to your trip? (y/n)";
                 std::string sChoice;
