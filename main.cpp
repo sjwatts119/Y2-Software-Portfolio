@@ -310,7 +310,7 @@ void PrintLocations(std::vector<Holiday>&vHolidays){
 }
 
 //Prints the Activity Management Menu.
-void PrintActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, int iLocation){
+void PrintActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, int iLocation, std::vector<int>&vSelectedActivityIndexes){
     //Clear Input Buffer
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     int iCount = 1;
@@ -320,11 +320,17 @@ void PrintActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActi
 
         //If the current activity is available in the current location, print it out.
         if(std::find(vAvailableLocations.begin(), vAvailableLocations.end(), vHolidays[iLocation].GetLocation()) != vAvailableLocations.end()){
-            std::cout << "Activity #"<< iCount << ": "<< std::endl;
-            std::cout << Activity.GetActivity() << std::endl;
-            std::cout << "Price (Per Person): " << Activity.GetCost() << std::endl;
-            std::cout << "\n";
 
+            //If no Activities have been selected, or if the current activity has not already been added, print out the current activity.
+            if (vSelectedActivityIndexes.size() == 0 || std::find(vSelectedActivityIndexes.begin(), vSelectedActivityIndexes.end(), iCount) != vSelectedActivityIndexes.end()){
+                std::cout << "Activity #"<< iCount << std::endl;
+                std::cout << Activity.GetActivity() << std::endl;
+                std::cout << "Price (Per Person): " << Activity.GetCost() << std::endl;
+                std::cout << "\n";
+            }
+            else{
+                std::cout << "Activity #" << iCount << " (Already Added): " << std::endl << std::endl;
+            }
             //Iterates the counter.
             iCount++;
         }
@@ -379,10 +385,10 @@ int ChooseLocation(std::vector<Holiday>&vHolidays, std::vector <User>&vFamily){
 }
 
 //Allows the user to choose an activity.
-int ChooseActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, int iLocationIndex){
+int ChooseActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, int iLocationIndex, std::vector<int>&vActivityIndexes){
     ClearScreen();
 
-    PrintActivities(vHolidays, vActivities, iLocationIndex);
+    PrintActivities(vHolidays, vActivities, iLocationIndex, vActivityIndexes);
 
     std::cout << "Please make a Selection:";
     int iChoice = 0;
@@ -488,9 +494,14 @@ void AddHoliday(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivitie
         }
 
         do{
+            //Get the user to select an activity.
+            int Activity = ChooseActivities(vHolidays, vActivities, iLocationIndex-1, vSelectedActivitiesIndexes);
+
             //If user selects anything other than 0, they want to add an activity.
-            if (ChooseActivities(vHolidays, vActivities, iLocationIndex) != 0) {
-                vSelectedActivitiesIndexes.push_back(ChooseActivities(vHolidays, vActivities, (iLocationIndex-1)));
+            if (Activity != 0) {
+
+                //Adds the index of the activity to the vector.
+                vSelectedActivitiesIndexes.push_back(Activity);
 
                 std::cout << "Would you like to add another activity to your trip? (y/n)";
                 std::string sChoice;
@@ -674,17 +685,6 @@ int main() {
                 break;
             case 2:
                 AddHoliday(vHolidays,vActivities, vFamily, vUserHolidays);
-
-                std::cout << "Here are the Holidays you have booked:" << std::endl;
-
-                for (auto vUserHoliday : vUserHolidays) {
-                    std::cout << "Location: " << vUserHoliday.GetLocation() << std::endl;
-
-                    for(int i = 0; i <= vUserHoliday.GetActivities().size(); i++){
-                        std::cout << "Activity: " << vUserHoliday.GetActivities()[i] << std::endl;
-                        std::cout << "Activity Cost: " << vUserHoliday.GetActivitiesPrice()[i] << std::endl;
-                    }
-                }
 
                 break;
             case 3:
