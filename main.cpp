@@ -47,9 +47,12 @@ void MainMenu(){
     std::cout << "1. Manage your Family" << std::endl;
     std::cout << "2. Add Holiday" << std::endl;
     std::cout << "3. View Booked Holidays" << std::endl;
-    std::cout << "4. Load Report" << std::endl;
-    std::cout << "5. Login to Admin Area" << std::endl << std::endl;
+    std::cout << "4. Cancel a Booking" << std::endl;
+    std::cout << "5. Load Report" << std::endl;
+    std::cout << "6. Login to Admin Area" << std::endl;
+    std::cout << "0. Quit" << std::endl << std::endl;
     std::cout << "Please make a Selection: ";
+
 }
 
 //Prints the Manage Family Menu to the screen.
@@ -63,7 +66,7 @@ void FamilyMenu(){
     std::cout << "1. Add a Family Member" << std::endl;
     std::cout << "2. Remove a Family Member" << std::endl;
     std::cout << "3. Modify a Family Member" << std::endl;
-    std::cout << "4. Confirm" << std::endl << std::endl;
+    std::cout << "0. Back" << std::endl << std::endl;
     std::cout << "Please make a Selection: ";
 }
 
@@ -272,7 +275,7 @@ void ManageUsers(std::vector<User>&vFamily){
             case 3:
                 ModifyUser(vFamily);
                 break;
-            case 4:
+            case 0:
                 bStop = true;
                 break;
             default:
@@ -326,6 +329,7 @@ void PrintActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActi
             iCount++;
         }
     }
+    std::cout << "0: Back" << std::endl;
 }
 
 //Allows the user to choose a location.
@@ -466,7 +470,7 @@ void AddHoliday(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivitie
     int iLocationIndex = ChooseLocation(vHolidays, vFamily);
 
     //If function returns -1, the user has selected to return to the main menu, or couldn't add a location due to group size, so the function returns.
-    if (iLocationIndex == 0) {
+    if (iLocationIndex == -1) {
         return;
     }
     else{
@@ -475,13 +479,16 @@ void AddHoliday(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivitie
         std::vector<int> vSelectedActivitiesIndexes;
         std::vector<Activity> vSelectedActivities;
 
+        std::cout << "Now you have selected a location, please select at least one Activity: " << std::endl;
+        Confirm();
+
         //Loops through all activities, adding the user's selected ones to the vector.
         for (auto vSelectedActivityIndex : vSelectedActivitiesIndexes) {
             vSelectedActivities.push_back(vActivities[vSelectedActivityIndex]);
         }
 
         do{
-            //
+            //If user selects anything other than 0, they want to add an activity.
             if (ChooseActivities(vHolidays, vActivities, iLocationIndex) != 0) {
                 vSelectedActivitiesIndexes.push_back(ChooseActivities(vHolidays, vActivities, (iLocationIndex-1)));
 
@@ -537,7 +544,48 @@ void AddHoliday(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivitie
 
 void ViewBookings(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, std::vector<User>&vFamily, std::vector<UserHoliday>&vUserHolidays){
     ClearScreen();
+
+    //If the UserHoliday Vector is empty, print an error message and return to the Main Menu.
+    if(vUserHolidays.empty()){
+        std::cout << "You have no bookings to view." << std::endl;
+
+        //Get the user to press enter to continue.
+        Confirm();
+
+        return;
+    }
+
     std::cout << "Here are your Current Bookings: " << std::endl;
+
+    int iCount = 1;
+    //Iterates through the UserHoliday Vector and prints the details of each of the user's Holidays.
+    for(auto UserHoliday : vUserHolidays){
+        //New Line
+        std::cout << std::endl;
+
+        //Shows what number booking it is.
+        std::cout << "Booking " << iCount << ": " << std::endl;
+        std::cout << std::endl;
+
+        //Shows the location of the holiday.
+        std::cout << "Holiday Location: " << UserHoliday.GetLocation() << std::endl;
+        std::cout << "Activities: " << std::endl;
+
+        //Shows the activities of the holiday.
+        for(int iIndex = 0; iIndex < UserHoliday.GetActivities().size(); iIndex++){
+            std::cout << "Activity: " << UserHoliday.GetActivities()[iIndex] << std::endl;
+            std::cout << "Activity Price: " << UserHoliday.GetActivitiesPrice()[iIndex] << std::endl;
+        }
+
+        //Shows the family members of the holiday.
+        std::cout << "Family Members: " << std::endl;
+        for(auto FamilyMember : UserHoliday.GetFamily()){
+            std::cout << FamilyMember.GetName() << std::endl;
+        }
+
+        //Iterates the count.
+        iCount++;
+    }
 
 }
 
@@ -548,6 +596,54 @@ void LoadReport(){
 void Admin(){
 
 };
+
+void CancelBooking(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, std::vector<User>&vFamily, std::vector<UserHoliday>&vUserHolidays){
+    ClearScreen();
+
+    //If the UserHoliday Vector is empty, print an error message and return to the Main Menu.
+    if(vUserHolidays.empty()){
+        std::cout << "You have no bookings to cancel." << std::endl;
+
+        //Get the user to press enter to continue.
+        Confirm();
+
+        return;
+    }
+    else{
+        bool bStop = false;
+        do{
+            //Prints the current bookings.
+            ViewBookings(vHolidays, vActivities, vFamily, vUserHolidays);
+
+            //Asks the user which booking they would like to cancel.
+            std::cout << "Please enter the number of the booking you would like to cancel: ";
+            int iBookingNumber;
+            std::cin >> iBookingNumber;
+
+            if(iBookingNumber == 0){
+                //The user wants to return to the main menu.
+                bStop = true;
+            }
+            else if(iBookingNumber > vUserHolidays.size() || iBookingNumber < 0){
+                //If the user enters a number that is not in the range of the UserHoliday Vector, print an error message and return to the Main Menu.
+                std::cout << "Please enter a valid booking number." << std::endl;
+
+                //Get the user to press enter to continue.
+                Confirm();
+
+                return;
+            }
+            else{
+                //Removes the UserHoliday from the UserHoliday Vector.
+                vUserHolidays.erase(vUserHolidays.begin() + iBookingNumber - 1);
+                std::cout << "Booking Cancelled!" << std::endl;
+
+                //Get the user to press enter to continue.
+                Confirm();
+            }
+        }while (!bStop);
+    }
+}
 
 
 int main() {
@@ -595,10 +691,15 @@ int main() {
                 ViewBookings(vHolidays, vActivities, vFamily, vUserHolidays);
                 break;
             case 4:
+                CancelBooking(vHolidays, vActivities, vFamily, vUserHolidays);
+            case 5:
                 LoadReport();
                 break;
-            case 5:
+            case 6:
                 Admin();
+                break;
+            case 0:
+                bStop = true;
                 break;
             default:
                 std::cout << "Error: Please make a Selection.";
