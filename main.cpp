@@ -298,7 +298,7 @@ void PrintLocations(std::vector<Holiday>&vHolidays){
     for(int i = 0; i < vHolidays.size(); i++) {
         std::cout << "Location #"<< i+1 << ": "<< std::endl;
         std::cout << "Location: " << ": " << vHolidays[i].GetLocation() << std::endl;
-        std::cout << "Price (Per Person): " << ": " << vHolidays[i].GetCost() << std::endl;
+        std::cout << "Price (Per Person): " << ": £" << vHolidays[i].GetCost() << std::endl;
         std::cout << "Minimum Travellers: " << ": " << vHolidays[i].GetMinimumTravellers() << std::endl;
         std::cout << "\n";
 
@@ -310,31 +310,43 @@ void PrintLocations(std::vector<Holiday>&vHolidays){
 }
 
 //Prints the Activity Management Menu.
-void PrintActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, int iLocation, std::vector<int>&vSelectedActivityIndexes){
-    int iCount = 1;
+void PrintActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, int &iLocation, std::vector<int>&vSelectedActivityIndexes){
 
-    for(auto Activity : vActivities){
-        std::vector<std::string> vAvailableLocations = Activity.GetAvailableLocations();
+    for (int i = 0; i < vActivities.size(); i++) {
+        std::vector<std::string> vAvailableLocations = vActivities[i].GetAvailableLocations();
 
-        //If the current activity is available in the current location, print it out.
-        if(std::find(vAvailableLocations.begin(), vAvailableLocations.end(), vHolidays[iLocation].GetLocation()) != vAvailableLocations.end()){
+        std::cout << iLocation;
 
-            //if the current activity is already selected, print it out stating it has already been selected..
-            if(std::find(vSelectedActivityIndexes.begin(), vSelectedActivityIndexes.end(), iCount) != vSelectedActivityIndexes.end()){
-                std::cout << "Activity #" << iCount << " (Already Added): " << std::endl;
-                std::cout << "Activity: " << ": " << Activity.GetActivity() << std::endl;
-                std::cout << "\n";
-            }
-            else{
-                std::cout << "Activity #"<< iCount << std::endl;
-                std::cout << Activity.GetActivity() << std::endl;
-                std::cout << "Price (Per Person): " << Activity.GetCost() << std::endl;
-                std::cout << "\n";
-            }
-            //Iterates the counter.
-            iCount++;
+        if (std::find(vAvailableLocations.begin(), vAvailableLocations.end(), vHolidays.at(iLocation-1).GetLocation()) != vAvailableLocations.end()) {
+            std::cout << "Activity #" << i << std::endl;
+            std::cout << "Activity: " << ": " << vActivities[i].GetActivity() << std::endl;
+            std::cout << "Price (Per Person): £" << vActivities[i].GetCost() << std::endl;
+            std::cout << "\n";
         }
     }
+
+
+
+//        //If the current activity is available in the current location, print it out.
+//        if(std::find(vAvailableLocations.begin(), vAvailableLocations.end(), vHolidays[iLocation].GetLocation()) != vAvailableLocations.end()){
+//
+//            //if the current activity is already selected, print it out stating it has already been selected..
+//            if(std::find(vSelectedActivityIndexes.begin(), vSelectedActivityIndexes.end(), iCount) != vSelectedActivityIndexes.end()){
+//                std::cout << "Activity #" << iCount << " (Already Added): " << std::endl;
+//                std::cout << "Activity: " << ": " << Activity.GetActivity() << std::endl;
+//                std::cout << "Price (Per Person): £" << Activity.GetCost() << std::endl;
+//                std::cout << "\n";
+//            }
+//            else{
+//                std::cout << "Activity #"<< iCount << std::endl;
+//                std::cout << Activity.GetActivity() << std::endl;
+//                std::cout << "Price (Per Person): £" << Activity.GetCost() << std::endl;
+//                std::cout << "\n";
+//            }
+//            //Iterates the counter.
+//            iCount++;
+//      }
+//    }
     std::cout << "0: Back" << std::endl;
 }
 
@@ -401,12 +413,18 @@ int ChooseActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActi
         return 0;
     }
     else{
-        std::cout << "Would you like to add this activity to your trip? (y/n)";
-        std::string sChoice;
-        std::cin >> sChoice;
+        if (iChoice > vActivities.size()) {
+            std::cout << "Please enter a valid option." << std::endl;
+            return -1;
+        }
+        else{
+            std::cout << "Would you like to add this activity to your trip? (y/n)";
+            std::string sChoice;
+            std::cin >> sChoice;
 
-        //Returns the index of the Activity in the Activity Vector.
-        return iChoice;
+            //Returns the index of the Activity in the Activity Vector.
+            return iChoice;
+        }
     }
 }
 
@@ -445,14 +463,14 @@ void PreviewCost(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActiviti
     //Prints the total cost Summary of the trip with breakdowns of the costs.
     ClearScreen();
     std::cout << "Here is a Cost Summary of your Holiday:" << std::endl;
-    std::cout << "Location Cost: " << dLocationCost << std::endl;
-    std::cout << "Activity Cost: " << dActivityCost << std::endl;
-    std::cout << "VAT: " << totalTaxedCost - totalCost << std::endl;
+    std::cout << "Location Cost: £" << dLocationCost << std::endl;
+    std::cout << "Activity Cost: £" << dActivityCost << std::endl;
+    std::cout << "VAT: £" << totalTaxedCost - totalCost << std::endl;
     //If there is a discount, print it.
     if (dDiscount != 0) {
-        std::cout << "Family Discount: " << dDiscount << std::endl;
+        std::cout << "Family Discount: £" << dDiscount << std::endl;
     }
-    std::cout << "Total Cost: " << totalCost << std::endl;
+    std::cout << "Total Cost: £" << totalCost << std::endl;
 }
 
 //Allows the user to manage the Current holiday
