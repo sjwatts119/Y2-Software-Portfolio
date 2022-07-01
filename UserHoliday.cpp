@@ -11,7 +11,7 @@ std::string UserHoliday::GetLocation(){
 }
 
 double UserHoliday::GetLocationPrice(){
-    return _vHoliday.at(0).GetCost();
+    return (_vHoliday.at(0).GetCost() * _vFamily.size());
 }
 
 //Return Holiday Activities
@@ -26,7 +26,7 @@ std::vector<std::string> UserHoliday::GetActivities(){
 std::vector<double> UserHoliday::GetActivitiesPrice(){
     std::vector<double> vActivitiesPrice;
     for(auto & Activity : _vActivities){
-        vActivitiesPrice.push_back(Activity.GetCost());
+        vActivitiesPrice.push_back(Activity.GetCost() * _vFamily.size());
     }
     return vActivitiesPrice;
 };

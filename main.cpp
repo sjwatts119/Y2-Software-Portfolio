@@ -48,8 +48,6 @@ void MainMenu(){
     std::cout << "2. Add Holiday" << std::endl;
     std::cout << "3. View Booked Holidays" << std::endl;
     std::cout << "4. Cancel a Booking" << std::endl;
-    std::cout << "5. Load Report" << std::endl;
-    std::cout << "6. Login to Admin Area" << std::endl;
     std::cout << "0. Quit" << std::endl << std::endl;
     std::cout << "Please make a Selection: ";
 
@@ -298,7 +296,7 @@ void PrintLocations(std::vector<Holiday>&vHolidays){
     for(int i = 0; i < vHolidays.size(); i++) {
         std::cout << "Location #"<< i+1 << ": "<< std::endl;
         std::cout << "Location: " << ": " << vHolidays[i].GetLocation() << std::endl;
-        std::cout << "Price (Per Person): " << ": £" << vHolidays[i].GetCost() << std::endl;
+        std::cout << "Price (Per Person): " << ": \x9C" << vHolidays[i].GetCost() << std::endl;
         std::cout << "Minimum Travellers: " << ": " << vHolidays[i].GetMinimumTravellers() << std::endl;
         std::cout << "\n";
 
@@ -315,38 +313,23 @@ void PrintActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActi
     for (int i = 0; i < vActivities.size(); i++) {
         std::vector<std::string> vAvailableLocations = vActivities[i].GetAvailableLocations();
 
-        std::cout << iLocation;
+        //If the current activity is available in the current location, print it.
+        if (std::find(vAvailableLocations.begin(), vAvailableLocations.end(), vHolidays.at(iLocation).GetLocation()) != vAvailableLocations.end()) {
 
-        if (std::find(vAvailableLocations.begin(), vAvailableLocations.end(), vHolidays.at(iLocation-1).GetLocation()) != vAvailableLocations.end()) {
-            std::cout << "Activity #" << i << std::endl;
+            //If the current activity is already selected, print it out saying so.
+            if(std::find(vSelectedActivityIndexes.begin(), vSelectedActivityIndexes.end(), i) != vSelectedActivityIndexes.end()){
+                std::cout << "Activity #" << i+1 << " (Already Selected)" << std::endl;
+            }
+            //Otherwise, simply print it out.
+            else{
+                std::cout << "Activity #" << i+1 << std::endl;
+            }
+
             std::cout << "Activity: " << ": " << vActivities[i].GetActivity() << std::endl;
-            std::cout << "Price (Per Person): £" << vActivities[i].GetCost() << std::endl;
+            std::cout << "Price (Per Person): \x9C" << vActivities[i].GetCost() << std::endl;
             std::cout << "\n";
         }
     }
-
-
-
-//        //If the current activity is available in the current location, print it out.
-//        if(std::find(vAvailableLocations.begin(), vAvailableLocations.end(), vHolidays[iLocation].GetLocation()) != vAvailableLocations.end()){
-//
-//            //if the current activity is already selected, print it out stating it has already been selected..
-//            if(std::find(vSelectedActivityIndexes.begin(), vSelectedActivityIndexes.end(), iCount) != vSelectedActivityIndexes.end()){
-//                std::cout << "Activity #" << iCount << " (Already Added): " << std::endl;
-//                std::cout << "Activity: " << ": " << Activity.GetActivity() << std::endl;
-//                std::cout << "Price (Per Person): £" << Activity.GetCost() << std::endl;
-//                std::cout << "\n";
-//            }
-//            else{
-//                std::cout << "Activity #"<< iCount << std::endl;
-//                std::cout << Activity.GetActivity() << std::endl;
-//                std::cout << "Price (Per Person): £" << Activity.GetCost() << std::endl;
-//                std::cout << "\n";
-//            }
-//            //Iterates the counter.
-//            iCount++;
-//      }
-//    }
     std::cout << "0: Back" << std::endl;
 }
 
@@ -428,6 +411,7 @@ int ChooseActivities(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActi
     }
 }
 
+//Allows the user to preview
 void PreviewCost(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, std::vector<User>&vFamily, int &iLocationIndex, std::vector<int>&vActivityIndexes){
     int iAdults = 0;
     int iChildren = 0;
@@ -444,7 +428,7 @@ void PreviewCost(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActiviti
     //Iterates through the vector of indexes and adds the cost of the activities to the total cost.
     double dActivityCost = 0;
     for(auto iIndex : vActivityIndexes){
-        dActivityCost = (iChildren + iAdults) * vActivities[iIndex].GetCost();
+        dActivityCost += (iChildren + iAdults) * vActivities[iIndex].GetCost();
     }
 
     //Calculates the total cost of the trip without VAT or Discount being applied.
@@ -456,21 +440,21 @@ void PreviewCost(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActiviti
     double dDiscount = 0;
     if (FamilyDiscount(vFamily)) {
         //10% Discount from totalCost if family is eligible for discount.
-        totalCost = totalCost * 0.9;
         dDiscount = totalCost * 0.1;
+        totalCost = totalCost * 0.9;
     }
 
     //Prints the total cost Summary of the trip with breakdowns of the costs.
     ClearScreen();
     std::cout << "Here is a Cost Summary of your Holiday:" << std::endl;
-    std::cout << "Location Cost: £" << dLocationCost << std::endl;
-    std::cout << "Activity Cost: £" << dActivityCost << std::endl;
-    std::cout << "VAT: £" << totalTaxedCost - totalCost << std::endl;
+    std::cout << "Location Cost: \x9C" << dLocationCost << std::endl;
+    std::cout << "Activity Cost: \x9C" << dActivityCost << std::endl;
+    std::cout << "VAT: \x9C" << totalTaxedCost - totalCost << std::endl;
     //If there is a discount, print it.
     if (dDiscount != 0) {
-        std::cout << "Family Discount: £" << dDiscount << std::endl;
+        std::cout << "Family Discount: \x9C" << dDiscount << std::endl;
     }
-    std::cout << "Total Cost: £" << totalCost << std::endl;
+    std::cout << "Total Cost: \x9C" << totalTaxedCost << std::endl;
 }
 
 //Allows the user to manage the Current holiday
@@ -506,79 +490,92 @@ void AddHoliday(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivitie
         std::cout << "Now you have selected a location, please select at least one Activity: " << std::endl;
         Confirm();
 
-        //Loops through all activities, adding the user's selected ones to the vector.
-        for (auto vSelectedActivityIndex : vSelectedActivitiesIndexes) {
-            vSelectedActivities.push_back(vActivities[vSelectedActivityIndex]);
+        //Counts the number of activities Available at the selected location.
+        int iAvailableLocations = 0;
+        for (auto & vActivity : vActivities) {
+            std::vector<std::string> vAvailableLocations = vActivity.GetAvailableLocations();
+            //If the current activity is available in the current location, print it.
+            if (std::find(vAvailableLocations.begin(), vAvailableLocations.end(), vHolidays.at(iLocationIndex).GetLocation()) != vAvailableLocations.end()){
+                iAvailableLocations++;
+            }
         }
 
         do{
-            //Get the user to select an activity.
-            int Activity = ChooseActivities(vHolidays, vActivities, iLocationIndex-1, vSelectedActivitiesIndexes);
-
-            //If user selects anything other than 0, they want to add an activity.
-            if (Activity != 0) {
-
-                //If user has already selected the Activity, print an error message and Loop again.
-                if (std::find(vSelectedActivitiesIndexes.begin(), vSelectedActivitiesIndexes.end(), Activity) != vSelectedActivitiesIndexes.end()) {
-                    std::cout << "You have already selected this activity." << std::endl;
-                    Confirm();
-                    continue;
-                }
-                else{
-                    //Add the Activity to the vector of selected Activities.
-                    vSelectedActivitiesIndexes.push_back(Activity);
-                }
-
-                std::cout << "Would you like to add another activity to your trip? (y/n)";
-                std::string sChoice;
-                std::cin >> sChoice;
-
-                if(sChoice == "n" || sChoice == "N"){
-
-                    bool bStop2 = false;
-
-                    do{
-                        //Prints the total Cost breakdown of the Holiday.
-                        PreviewCost(vHolidays, vActivities, vFamily, iLocationIndex, vSelectedActivitiesIndexes);
-
-                        //Ask the user if they would like to confirm the trip.
-                        std::cout << "Would you like to Confirm this Holiday Booking?: " << std::endl;
-                        std::cout << "(y/n): ";
-                        std::string sConfirm;
-                        std::cin >> sConfirm;
-
-                        if(sConfirm == "y" || sConfirm == "Y"){
-                            //Making a new vector from the user's chosen location.
-                            std::vector<Holiday> vSelectedLocation;
-                            vSelectedLocation.push_back(vHolidays[iLocationIndex]);
-
-                            //Adds the Holiday to the UserHoliday Vector.
-                            vUserHolidays.emplace_back(UserHoliday(vSelectedLocation, vSelectedActivities, vFamily));
-                            std::cout << "Holiday Booking Confirmed! You will now be returned to the Holiday Management Menu." << std::endl;
-                            Confirm();
-                            bStop2 = true;
-                        }
-                        else if(sConfirm == "n" || sConfirm == "N"){
-                            std::cout << "Holiday Booking Cancelled! You will now be returned to the Holiday Management Menu." << std::endl;
-                            Confirm();
-                            bStop2 = true;
-                        }
-                        else{
-                            std::cout << "Please enter a valid option." << std::endl;
-                        }
-                    }while(!bStop2);
-
-                    bStop = true;
-                }
-            }
-            else{
+            if (vSelectedActivitiesIndexes.size() == iAvailableLocations) {
+                std::cout << "You have selected all of the available activities for this location." << std::endl;
+                Confirm();
                 bStop = true;
             }
+            else {
+                //Get the user to select an activity.
+                int Activity = ChooseActivities(vHolidays, vActivities, iLocationIndex, vSelectedActivitiesIndexes);
 
+                //If user selects anything other than 0, they want to add an activity.
+                if (Activity != 0) {
+
+                    //If user has already selected the Activity, print an error message and Loop again.
+                    if (std::find(vSelectedActivitiesIndexes.begin(), vSelectedActivitiesIndexes.end(), Activity-1) !=
+                        vSelectedActivitiesIndexes.end()) {
+                        std::cout << "You have already selected this activity." << std::endl;
+                        Confirm();
+                        continue;
+                    } else {
+                        //Add the Activity to the vector of selected Activities.
+                        vSelectedActivitiesIndexes.push_back(Activity-1);
+                    }
+
+                    std::cout << "Would you like to add another activity to your trip? (y/n)";
+                    std::string sChoice;
+                    std::cin >> sChoice;
+
+                    if (sChoice == "n" || sChoice == "N") {
+                        bStop = true;
+                    }
+                }
+            }
         }while(!bStop);
+
+        bool bStop2 = false;
+
+        do{
+            //Prints the total Cost breakdown of the Holiday.
+            PreviewCost(vHolidays, vActivities, vFamily, iLocationIndex, vSelectedActivitiesIndexes);
+
+            //Ask the user if they would like to confirm the trip.
+            std::cout << "Would you like to Confirm this Holiday Booking?: " << std::endl;
+            std::cout << "(y/n): ";
+            std::string sConfirm;
+            std::cin >> sConfirm;
+
+            if(sConfirm == "y" || sConfirm == "Y"){
+                //Making a new vector from the user's chosen location.
+                std::vector<Holiday> vSelectedLocation;
+                vSelectedLocation.push_back(vHolidays[iLocationIndex]);
+
+                //Loops through all activities, adding the user's selected ones to the vector.
+                for (auto vSelectedActivityIndex : vSelectedActivitiesIndexes) {
+                    vSelectedActivities.push_back(vActivities[vSelectedActivityIndex]);
+                }
+
+                //Adds the Holiday to the UserHoliday Vector.
+                vUserHolidays.emplace_back(UserHoliday(vSelectedLocation, vSelectedActivities, vFamily));
+                std::cout << "Holiday Booking Confirmed! You will now be returned to the Holiday Management Menu." << std::endl;
+                Confirm();
+                bStop2 = true;
+            }
+            else if(sConfirm == "n" || sConfirm == "N"){
+                std::cout << "Holiday Booking Cancelled! You will now be returned to the Holiday Management Menu." << std::endl;
+                Confirm();
+                bStop2 = true;
+            }
+            else{
+                std::cout << "Please enter a valid option." << std::endl;
+            }
+        }while(!bStop2);
     }
 };
 
+//Allows the user to view their current Bookings.
 void ViewBookings(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, std::vector<User>&vFamily, std::vector<UserHoliday>&vUserHolidays){
     ClearScreen();
 
@@ -599,20 +596,31 @@ void ViewBookings(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivit
     for(auto UserHoliday : vUserHolidays){
         //New Line
         std::cout << std::endl;
+        std::cout << std::endl;
 
         //Shows what number booking it is.
         std::cout << "Booking " << iCount << ": " << std::endl;
         std::cout << std::endl;
 
         //Shows the location of the holiday.
+        double dHolidayCost = 0;
+        dHolidayCost = UserHoliday.GetLocationPrice();
         std::cout << "Holiday Location: " << UserHoliday.GetLocation() << std::endl;
+        std::cout << "Holiday Cost: " << UserHoliday.GetLocationPrice() << std::endl;
+
+        std::cout << std::endl;
+
         std::cout << "Activities: " << std::endl;
 
-        //Shows the activities of the holiday.
-        for(int iIndex = 0; iIndex < UserHoliday.GetActivities().size(); iIndex++){
-            std::cout << "Activity: " << UserHoliday.GetActivities()[iIndex] << std::endl;
-            std::cout << "Activity Price: " << UserHoliday.GetActivitiesPrice()[iIndex] << std::endl;
+        //Shows the activities of the holiday and adds the costs of each to the total Activity cost.
+        double dActivityCost = 0;
+        for(int i = 0; i < UserHoliday.GetActivities().size(); i++){
+            std::cout << "Activity: " << UserHoliday.GetActivities()[i]<< std::endl;
+            std::cout << "Activity Cost: \x9C" << UserHoliday.GetActivitiesPrice()[i]<< std::endl;
+            dActivityCost += UserHoliday.GetActivitiesPrice()[i];
+
         }
+        std::cout << std::endl;
 
         //Shows the family members of the holiday.
         std::cout << "Family Members: " << std::endl;
@@ -620,20 +628,20 @@ void ViewBookings(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivit
             std::cout << FamilyMember.GetName() << std::endl;
         }
 
+        std::cout << std::endl;
+
+        //Output the Total Cost of the Holiday including VAT.
+        std::cout << "Total Cost (+VAT): \x9C" << (dHolidayCost + dActivityCost) * 1.2 << std::endl;
+
+
         //Iterates the count.
         iCount++;
     }
+    Confirm();
 
 }
 
-void LoadReport(){
-
-};
-
-void Admin(){
-
-};
-
+//Allows the user to cancel any of their Current Bookings.
 void CancelBooking(std::vector<Holiday>&vHolidays, std::vector<Activity>&vActivities, std::vector<User>&vFamily, std::vector<UserHoliday>&vUserHolidays){
     ClearScreen();
 
@@ -718,12 +726,6 @@ int main() {
                 break;
             case 4:
                 CancelBooking(vHolidays, vActivities, vFamily, vUserHolidays);
-            case 5:
-                LoadReport();
-                break;
-            case 6:
-                Admin();
-                break;
             case 0:
                 bStop = true;
                 break;
